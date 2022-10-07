@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset
 from torchvision import datasets
-from torchvision.transforms import ToTensor
+from torchvision.transforms import ToTensor, Lambda
 import matplotlib.pyplot as plt
 
 
@@ -44,3 +44,22 @@ for i in range(1, cols * rows + 1):
     plt.axis('off')
     plt.imshow(img.squeeze(), cmap='gray')
 plt.show()
+
+
+'''
+TRANSFORMS
+All TorchVision datasets have two parameters -transform to modify the features and target_transform to modify
+the labels - that accept callables containing the transformation logic. The torchvision.transforms module
+offers several commonly-used transforms out of the box.
+'''
+
+# Loading dataset with custom transform
+ds = datasets.FashionMNIST(
+        root='data',
+        train=True,
+        dowload=True,
+        transform=ToTensor(),
+        target_transform=Lambda(lambda y: torch.zeros(10, dtype=torch,float).scatter_(0, torch.tensor(y), value=1))
+)
+
+
