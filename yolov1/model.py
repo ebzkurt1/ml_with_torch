@@ -1,4 +1,4 @@
-import torch as nn
+import torch.nn as nn
 
 
 architecture_yolov1 = [
@@ -64,6 +64,7 @@ class YOLOv1(nn.Module):
                         padding=x[3],
                     )
                 ]
+                in_channels = x[1]
             elif type(x) == str:
                 layers += [nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2))]
             elif type(x) == list:
@@ -104,10 +105,3 @@ class YOLOv1(nn.Module):
             nn.LeakyReLU(0.1),
             nn.Linear(496, S * S * (C + B * 5)),
         )
-    
-    def test(split_size, num_boxes, num_classes):
-        model = YOLOv1(split_size, num_boxes, num_classes)
-        x = torch.randn((2, 3, 448, 448))
-        print(model(x).shape)
-        assert model(x).shape == (2, 7 * 7 * 30)
-        print("Success!")
